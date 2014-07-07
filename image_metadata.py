@@ -5,6 +5,7 @@
 #                   license type. It will then write this information to a csv
 #                   file.
 # Version History:  V1- Initial structuring of program.
+#                   V2- Added write to csv functionality.
 # Author:           Mika Smith
 #
 # Created:          07/07/2014
@@ -18,6 +19,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+import csv
 
 class Image:
 
@@ -71,3 +74,13 @@ if __name__ == '__main__':
         images.append(Image(image_ID, filename, title,owner,licence))
     for image in images:
         image.display_info()
+
+file_name = 'imagedb.txt'
+
+ofile = open(file_name, 'a') #to overwrite the file use 'w' or to append to the file use 'a'
+writer = csv.writer(ofile, delimiter=',')
+
+for i in range (0, len(images)):
+    writer.writerow([image.get_image_ID(),image.get_filename(),image.get_title(),image.get_owner(),image.get_licence()])
+
+ofile.close()
