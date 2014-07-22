@@ -6,11 +6,12 @@
 #                   file.
 # Version History:  V1- Initial structuring of program.
 #                   V2- Added write to csv functionality.
+#                   V3-Added GUI.
 # Author:           Mika Smith
 #
 # Created:          07/07/2014
 # Copyright:        (c) Mika Smith 2014
-# Licence:          <Creative Commons>
+# Licence:          <Creative Commons> http://www.daniweb.com/software-development/python/threads/391736/how-to-add-a-drop-down-menu-and-return-the-selected-option
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
@@ -21,6 +22,8 @@ if __name__ == '__main__':
     main()
 
 import csv
+from tkinter import *
+import tkinter.messagebox
 
 class Image:
 
@@ -29,7 +32,7 @@ class Image:
         self.image_ID = image_ID
         self.filename = filename
         self.title = title
-        self.owner= owner
+        self.owner = owner
         self.licence = licence
 
     def get_image_ID(self):
@@ -54,33 +57,87 @@ class Image:
         print("Owner:", owner)
         print("Licence:", licence)
 
-def get_info():
-    global image_ID
-    global filename
-    global title
-    global owner
-    global licence
-    image_ID=int(input("What is the ID of the image?"))
-    filename=input("What is the filename?")
-    title=input("What is the title?")
-    owner=input("Who is the owner?")
-    licence=input("What is the licence type?")
+class GUI:
 
-if __name__ == '__main__':
-    images=[]
-    num_images=int(input("How many images are there?"))
-    for i in range(num_images):
-        get_info()
-        images.append(Image(image_ID, filename, title,owner,licence))
-    for image in images:
-        image.display_info()
+    def __init__(self):
+        window = Tk()
+        window.title("Image Metadata Entry")
+        window.minsize(width=400, height=200)
 
-file_name = 'imagedb.txt'
+        self.ready_to_write = False
+        self.imagelist = []
 
-ofile = open(file_name, 'a') #to overwrite the file use 'w' or to append to the file use 'a'
-writer = csv.writer(ofile, delimiter=',')
+        image_ID_label = Label(window, text='Enter Image ID:') #add to a list
+        image_ID_label.pack()
+        self.image_ID_field = Entry(window)
+        self.image_ID_field.pack()
 
-for i in range (0, len(images)):
-    writer.writerow([image.get_image_ID(),image.get_filename(),image.get_title(),image.get_owner(),image.get_licence()])
+        filename_label = Label(window, text='Enter Filename:')
+        filename_label.pack()
+        self.filename_field = Entry(window)
+        self.filename_field.pack()
 
-ofile.close()
+        title_label = Label(window, text='Enter Title:')
+        title_label.pack()
+        self.title_field = Entry(window)
+        self.title_field.pack()
+
+        owner_label = Label(window, text='Enter Owner:')
+        owner_label.pack()
+        self.owner_field = Entry(window)
+        self.owner_field.pack()
+
+        licence_label = Label(window, text='Enter Licence Type:')
+        licence_label.pack()
+        self.licence_field = Entry(window)
+        self.licence_field.pack()
+
+        button_validate_label = Label(window, text='Press to validate:')
+        button_validate = Button(window, text='Submit', command=self.doSubmit)
+        button_validate_label.pack()
+        button_validate.pack()
+
+        button_csv_label = Label(window, text='Convert Record to csv')
+        button_csv = Button(window, text='write to csv', command=self.writetocsv)
+        button_csv_label.pack()
+        button_csv.pack()
+
+        window.mainloop()
+
+    def doSubmit(self):
+        if len(self.image_ID_field.get()) <1 or len(self.filename_field.get()) <1 or len(self.title_field.get()) <1 or len(self.owner_field.get()) <1  or len(self.licence_field.get()) <1 :
+                tkinter.messagebox.showwarning('Warning!','Please do not leave values empty.')
+        else:
+            try:
+                validated_image_ID = int(self.image_ID_field.get()) #not in ID_list
+
+                self.imagelist.append(Image(self.image_ID_field.get(),self.filename_field.get(), self.title_field.get(), self.owner_field.get(), self.licence_field.get()))
+                self.ready_to_write= True
+                tkinter.messagebox.showinfo('Success!','Your submission has been sucessful.')
+
+                #The following code clears the input boxes. Why did I choose to do this?
+                self.image_ID_field.delete(0, END)
+                self.filename_field.delete(0, END)
+                self.title_field.delete(0, END)
+                self.owner_field.delete(0, END)
+                self.licence_field.delete(0, END)
+            except:
+                tkinter.messagebox.showwarning('Warning!','Please enter a numeric value for Image ID.')
+                print('Please enter a numeric value for Image ID.')
+
+    def writetocsv(self):
+        csv_name = 'ITWORKED.txt'
+
+        if self.ready_to_write:
+            ofile = open(csv_name, 'a') #to overwrite the file use 'w' or to append to the file use 'a'
+            writer = csv.writer(ofile, delimiter=',')
+            for image in self.imagelist:
+                writer.writerow([image.get_image_ID(),image.get_filename(), image.get_title(),image.get_owner(),image.get_licence()])
+            ofile.close()
+        else:
+            tkinter.messagebox.showwarning('Error!', 'Please validate your data before writing it to a csv file.')
+
+        self.ready_to_write= False
+        tkinter.messagebox.showinfo('Success!',csv_name+' has been generated successfully.')
+
+GUI()
