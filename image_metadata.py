@@ -65,17 +65,17 @@ class GUI: #This is the graphical user interface
     def __init__(self):
         window = Tk() #creating root window that everything is held in
         window.title("Image Metadata Entry") #Title for root window
-        window.minsize(width=650, height=150) #setting size of root window
+        window.geometry("400x550+450+70")  #setting size and position of root window
         window.configure(bg = "cornsilk")#configure overrides any of the previous construction options.
         label_font= ("Cambria", "11")
 
         self.ready_to_write = False #boolean logic.
         self.imagelist = [] #setting up a list to store records efficiently.
 
-        button_help_label = Label(window, text='Press for help:', font =(label_font))
-        button_help_label.pack() #.pack is the attribute needed to actually let the widget show on the GUI.
-        button_help = Button(window, text="Help", command=self.doHelp) #Run the doHelp function
-        button_help.pack()
+        #button_help_label = Label(window, text='Press for help:', font =(label_font))
+        #button_help_label.pack(anchor=NE) #.pack is the attribute needed to actually let the widget show on the GUI.
+        button_help = Button(window, text="?", command=self.doHelp, bg="light slate blue", padx = 30, pady = 5,borderwidth=2, font=('Cambria', '11', 'bold')) #Run the doHelp function
+        button_help.pack(anchor=NE)
 
         image_ID_label = Label(window, text='Enter Image ID:', font =(label_font), padx = 2, pady = 2)
         image_ID_label.pack()
@@ -118,12 +118,12 @@ class GUI: #This is the graphical user interface
         OptionMenu(window, self.licence_field, *licence_choices).pack()
 
         button_validate_label = Label(window, text='Press to validate:', font =(label_font))
-        button_validate = Button(window, text='Submit', command=self.doValidate) #Run the doValidate function
+        button_validate = Button(window, text='Submit', command=self.doValidate, bg="light slate blue", padx = 30, pady = 5, borderwidth=2) #Run the doValidate function
         button_validate_label.pack()
         button_validate.pack()
 
         button_csv_label = Label(window, text='Convert Record to csv', font =(label_font))
-        button_csv = Button(window, text='Write to csv', command=self.doWrite) #Run the doWrite function
+        button_csv = Button(window, text='Write to csv', command=self.doWrite, bg="light slate blue", padx = 30, pady = 5, borderwidth=2) #Run the doWrite function
         button_csv_label.pack()
         button_csv.pack()
 
