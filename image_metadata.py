@@ -9,6 +9,7 @@
 #                   V3-Added GUI.
 #                   V4-Added dropdown menus for file extension and licence type. Added validation for unique image ID. Seperated owners first name and last name.
 #                   V5- Changed design of GUI. Added a default value for the option menus and extra validation for them. Changed root window's colour and size.
+#                   V6- Made final changes on design of GUI.
 # Author:           Mika Smith
 #
 # Created:          07/07/2014
@@ -72,8 +73,6 @@ class GUI: #This is the graphical user interface
         self.ready_to_write = False #boolean logic.
         self.imagelist = [] #setting up a list to store records efficiently.
 
-        #button_help_label = Label(window, text='Press for help:', font =(label_font))
-        #button_help_label.pack(anchor=NE) #.pack is the attribute needed to actually let the widget show on the GUI.
         button_help = Button(window, text="?", command=self.doHelp, bg="light slate blue", padx = 30, pady = 5,borderwidth=2, font=('Cambria', '11', 'bold')) #Run the doHelp function
         button_help.pack(anchor=NE)
 
